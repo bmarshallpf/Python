@@ -1,7 +1,8 @@
 ﻿#Brandon Marshall
 #Python Scripting
-#August 29, 2015
+#August 30, 2015
 #Homework 1
+#Version: 2
 
 tries = 1
 larger = False
