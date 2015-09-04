@@ -1,6 +1,5 @@
 ﻿#Brandon Marshall       Python Scripting
 #September 3, 2015      Homework 1
-#test
 
 tries, nextGuess, modifier = 1, 50, 50
 name = input("Hello, what is your name?\n")
