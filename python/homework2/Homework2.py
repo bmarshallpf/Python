@@ -1,6 +1,6 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#September 12, 2015
+#September 17, 2015
 #Homework 2
 
 data_list=["And now here is my secret, a very simple secret: It is only with the heart that one can see rightly; what is essential is invisible to the eye.",
@@ -88,30 +88,35 @@ data_list=["And now here is my secret, a very simple secret: It is only with the
 
 query=input("query:")
 
+terms = query.split(" ")
+
 hasOr = False
-hasAnd = "and" in query
-if hasAnd:
-	#replace any or's with and since there is both
-	query.replace("or", "and")
-else:
-	hasOr = "or" in query
+hasAnd = "and" in terms
+if not hasAnd:
+	hasOr = "or" in terms
+	if not hasOr:
+		hasAnd = True
 
-terms = []
-if hasAnd:
-    terms = query.split("and")
-else:
-	if hasOr:
-		terms = query.split("or")
-
-terms = [term.strip() for term in terms]
+#remove the delimiter terms now
+while "and" in terms:
+	terms.remove("and")
+while "or" in terms:
+	terms.remove("or")
 
 hasMatch = False
 
-matches = {}
+usedNums = []
 for i,quote in enumerate(data_list):
-	if hasAnd:
-		words = tuple(quote.split())
+	#split quote into words
+	words = tuple(quote.split())
 
+	if hasOr:
+		for term in terms:
+			if term in words:
+				if i not in usedNums:
+					usedNums.append(i)
+					print("Found at ", i, quote[:80])
+	elif hasAnd:
 		isGood = True
 		for term in terms:
 			if term not in words:
@@ -119,12 +124,6 @@ for i,quote in enumerate(data_list):
 				break
 
 		if isGood:
-			matches[i] = quote
-			
-
-if hasAnd:
-	for key in matches.keys():
-		print("Found at ", key, matches[key][:80])
-
-#		if (query == word):
-#			print("Found at ", i, quote[:80])
+			if i not in usedNums:
+				usedNums.append(i)
+				print("Found at ", i, quote[:80])		
