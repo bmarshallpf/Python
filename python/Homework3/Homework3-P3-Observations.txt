@@ -1,0 +1,8 @@
+Brandon Marshall       
+Python Scripting
+September 24, 2015
+Homework 3 - Problem 1
+
+For my first test, I simply iterated through the collection of quote strings and used "in" to check for the search terms. For the second test, I split the quotes up into tuples of words, then used "in" to check for search terms. Interestingly enough, searching through the tuples was slightly slower than searching through the strings. For the last test, I went through all the quotes and broke every word into a dictionary of the word (key) and the lines where that word existed (value - list). Then I used the intersection and union functions to consolidate the lists of line numbers. The results of this test were much better, with the times being just over half the times when I used tuples, so greatly improved.
+
+One other thing I noticed that I thought was strange at first was that the OR checks were consistently 3 milliseconds slower than AND checks. At first I thought it would be the opposite, but then I realized my AND check logic was short circuiting whenever something didn't meet one of the search terms, so it made sense that the execution time would be shorter in that situation.
