@@ -1,7 +1,7 @@
 #Brandon Marshall       
 #Python Scripting
 #September 26, 2015
-#Homework 4 - Assignment 1
+#Homework 4 - Assignment 1 - File Finder
 
 import os
 
