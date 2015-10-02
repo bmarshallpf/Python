@@ -1,11 +1,12 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#September 28, 2015
+#October 1, 2015
 #Homework 4 - File Traverser
 
-import searcher
 import data_load
 import indexer
+import searcher
 
-d = indexer.process_data("raw_data.pickle", "fortunes_shelve", "indexed_files")
+data_load.get_traversal_data()
+indexer.process_data("raw_data.pickle", "fortunes_shelve", "indexed_files")
 searcher.search("fortunes_shelve", "indexed_files")

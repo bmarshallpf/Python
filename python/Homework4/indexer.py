@@ -3,8 +3,6 @@
 #October 1, 2015
 #Homework 4 - File Traverser
 
-#from data_load import data_list
-
 import pickle
 import shelve
 

@@ -38,10 +38,11 @@ def search(shelve_to_process, shelve_key):
 
 	if hasAnd:
 		for term in terms:
-			if len(goodFiles) == 0:
-				goodFiles.update(indexedFiles[term])
-			else:
-				goodFiles = goodFiles.intersection(indexedFiles[term])
+			if term in indexedFiles:
+				if len(goodFiles) == 0:
+					goodFiles.update(indexedFiles[term])
+				else:
+					goodFiles = goodFiles.intersection(indexedFiles[term])
 
 	# finish timing of search functionality
 	end_time = time.perf_counter() * 1000
@@ -52,7 +53,10 @@ def search(shelve_to_process, shelve_key):
 	print("Performing " + word + 
 	   " search for: {\'" + '\', \''.join(terms) + "\'}")
 
-	for gf in goodFiles:
-		print("Found at", gf)
+	if len(goodFiles) == 0:
+		print("Sorry, no files found with that query!")
+	else:
+		for gf in goodFiles:
+			print("Found at", gf)
 
 	print("Execution time:", int(end_time - start_time))
