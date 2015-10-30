@@ -1,7 +1,7 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#October 1, 2015
-#Homework 4 - File Traverser
+#October 30, 2015
+#Homework 6 - Search Engine
 
 import time
 import shelve
@@ -11,17 +11,25 @@ def search(shelve_to_process, shelve_key):
 	# start timing of search functionality
 	start_time = time.perf_counter() * 1000
 
+	# catch any exception occurring when attempting to open the shelve
 	try:
 		s = shelve.open(shelve_to_process)
 	except:
 		print("Error opening shelve " + shelve_to_process)
-
-	indexedFiles = s[shelve_key]
+		return
+	
+	# catch a key error if the shelve doesn't contain the specified key
+	try:
+		indexedFiles = s[shelve_key]
+	except KeyError as ke:
+		print("Could not find the specified key in the shelve: " + shelve_to_process + "\n" + str(ke.args[0]))
+		return
 
 	keepGoing = True
 	while keepGoing:
 		query = input("Options: \n. > exit\nf > forecast\ns > search\nSelection:")
 		
+		# raise exception to prevent user to search for numbers
 		try:
 			if query.isdigit():
 				raise SyntaxError("Search term can't be a number!\n")

@@ -1,7 +1,7 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#October 5, 2015
-#Homework 5 - Task 4
+#October 30, 2015
+#Homework 6 - Search Engine
 
 def formatTemp(kelvin):
 	return "{:.0f}".format(kelvin * (9/5) - 459.67) + "F"

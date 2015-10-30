@@ -1,7 +1,7 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#October 1, 2015
-#Homework 5 - Web Crawler
+#October 30, 2015
+#Homework 6 - Search Engine
 
 import os
 import fnmatch
@@ -26,7 +26,3 @@ def get_traversal_data():
 		print("Sorry - the path does not exist.")
 
 	return foundFiles
-
-	#out = open("raw_data.pickle", "bw")
-	#pickle.dump(foundFiles, out)
-	#out.close()

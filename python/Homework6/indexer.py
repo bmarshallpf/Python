@@ -1,7 +1,7 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#October 1, 2015
-#Homework 4 - File Traverser
+#October 30, 2015
+#Homework 6 - Search Engine
 
 import pickle
 import shelve
@@ -9,9 +9,16 @@ import shelve
 def process_data(shelve_file, shelve_key, data_pickle, web_pickle = ""):
 	indexed = {}
 
-	f = open(data_pickle, "br")
-	foundData = pickle.load(f)
-	f.close()
+	# catch exceptions with loading from the pickle as well as opening the 
+	# file to begin with
+	try:
+		with open(data_pickle, "br") as f:
+			try:
+				foundData = pickle.load(f)
+			except pickle.UnpicklingError:
+				print("Problem unpickling object.")
+	except IOError as ioe:
+		print("Unable to access file: " + ioe.filename)
 
 	for file in foundData:
 		path = file[0][0]
@@ -24,9 +31,17 @@ def process_data(shelve_file, shelve_key, data_pickle, web_pickle = ""):
 			indexed[word].add(path)
 
 	if web_pickle != "":
-		f = open(web_pickle, "br")
-		foundData = pickle.load(f)
-		f.close()
+
+		# catch exceptions with loading from the pickle as well as opening the 
+		# file to begin with
+		try:
+			with open(web_pickle, "br") as f:
+				try:
+					foundData = pickle.load(f)
+				except pickle.UnpicklingError:
+					print("Problem unpickling object.")
+		except IOError as ioe:
+			print("Unable to access file: " + ioe.filename)
 
 		for data in foundData:
 			url = data[0]
@@ -37,5 +52,12 @@ def process_data(shelve_file, shelve_key, data_pickle, web_pickle = ""):
 
 				indexed[word].add(url)
 
-	s = shelve.open(shelve_file)
+	# catch any exception occurring when attempting to open the shelve
+	try:
+		s = shelve.open(shelve_file)
+	except:
+		print("Error opening shelve " + shelve_file)
+		return
+
 	s[shelve_key] = indexed
+	

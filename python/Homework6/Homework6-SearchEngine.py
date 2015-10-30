@@ -1,7 +1,7 @@
-#Brandon Marshall       
+﻿#Brandon Marshall       
 #Python Scripting
-#October 3, 2015
-#Homework 5 - Task 3
+#October 30, 2015
+#Homework 6 - Search Engine
 
 import urllib.request
 from urllib.error import  URLError
@@ -88,13 +88,27 @@ web_data = visit_url(seed, "www.newhaven.edu", returnList)
 webPickle = "raw_web.pickle"
 dataPickle = "raw_data.pickle"
 
-out = open(webPickle, "bw")
-pickle.dump(web_data, out)
-out.close()
+# catch exceptions dealing with pickling the objects, as well as catching 
+# any exceptions dealing with opening the file to begin with
+try:
+	with open(webPickle, "bw") as out:
+		try:
+			pickle.dump(web_data, out)
+		except pickle.PicklingError:
+			print("Unpicklable object passed into dump().")
+except IOError as ioe:
+	print("Unable to write to file: " + ioe.filename)
 
-out = open(dataPickle, "bw")
-pickle.dump(file_data, out)
-out.close()
+# catch exceptions dealing with pickling the objects, as well as catching 
+# any exceptions dealing with opening the file to begin with
+try:
+	with open(dataPickle, "bw") as out:
+		try:
+			pickle.dump(file_data, out)
+		except pickle.PicklingError:
+			print("Unpicklable object passed into dump().")
+except IOError as ioe:
+	print("Unable to write to file: " + ioe.filename)
 
 indexer.process_data("unh_shelve", "indexed_files", dataPickle, webPickle)
 searcher.search("unh_shelve", "indexed_files")
