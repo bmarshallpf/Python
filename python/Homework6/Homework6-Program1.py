@@ -25,9 +25,6 @@ class Animal:
 				elif count == 2:
 					print("I am gray. ")
 					count = 3
-				else:
-					print("Sorry - you lose.\n")
-					break
 			elif self.name == "tiger":
 				if count == 0:
 					print("I am the biggest cat. ")
@@ -38,9 +35,6 @@ class Animal:
 				elif count == 2:
 					print("I am not a lion. ")
 					count = 3
-				else:
-					print("Sorry - you lose.\n")
-					break
 			elif self.name == "bat":
 				if count == 0:
 					print("I use echo-location. ")
@@ -51,12 +45,13 @@ class Animal:
 				elif count == 2:
 					print("I see well in dark. ")
 					count = 3
-				else:
-					print("Sorry - you lose.\n")
-					count = 4
-					break
 
 			guess = input("Who am I? ")
+			
+			if count == 3:
+				print("I'm out of hints! The answer is: " + self.name + "\n")
+				count = 4
+				break
 
 		if count < 4:
 			print("You got it! I am a " + self.name + "\n")
