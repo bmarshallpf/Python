@@ -1,7 +1,7 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#October 30, 2015
-#Homework 6 - Search Engine
+#November 12, 2015
+#Homework 7 - Search Engine
 
 import urllib.request
 from urllib.error import  URLError

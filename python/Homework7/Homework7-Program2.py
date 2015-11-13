@@ -1,4 +1,4 @@
-#Brandon Marshall       
+﻿#Brandon Marshall       
 #Python Scripting
 #November 12, 2015
 #Homework 7 - Program 2
@@ -19,7 +19,7 @@ def get_form_vals(post_str):
 	form_vals = {item.split("=")[0]: item.split("=")[1] for item in post_str.decode().split("&")}
 	return form_vals
 
-def hello_world_app(environ, start_response):
+def zoo_app(environ, start_response):
 	#print("ENVIRON:", environ)
 	message=""
 	status = '200 OK'
@@ -61,7 +61,7 @@ def hello_world_app(environ, start_response):
 	message += "<br><br><input type='submit' name='Submit' ></form>"
 	return[bytes(message,'utf-8')]
 
-httpd = make_server('', 8000, hello_world_app)
+httpd = make_server('', 8000, zoo_app)
 print("Serving on port 8000...")
 
 httpd.serve_forever()
