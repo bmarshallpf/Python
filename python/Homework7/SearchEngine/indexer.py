@@ -5,6 +5,29 @@
 
 import pickle
 import shelve
+import sqlite3
+
+def add_data_to_database(data):
+	conn = sqlite3.connect("searchengine.sqlite")
+	cursor = conn.cursor()
+	cursor.execute("delete from results") # clear existing data
+
+	# add data to the database
+	items = data.items()
+	for entry in items:
+		res = ""
+		key =  entry[0]
+		
+		for val in entry[1]:
+			res += val + ', '
+		cursor.execute("insert into results(word, results) values(?, ?)", (key, res))
+
+	conn.commit()
+
+	#results = cursor.execute("select * from results")
+	#for result in results:
+	#	print(str(result[1]))
+	conn.close()
 
 def process_data(shelve_file, shelve_key, data_pickle, web_pickle = ""):
 	indexed = {}
@@ -58,6 +81,9 @@ def process_data(shelve_file, shelve_key, data_pickle, web_pickle = ""):
 	except:
 		print("Error opening shelve " + shelve_file)
 		return
+
+	# add data to database
+	add_data_to_database(indexed)
 
 	s[shelve_key] = indexed
 	
