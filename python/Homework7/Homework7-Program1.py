@@ -20,35 +20,35 @@ middle = "</td><td bgcolor=\"#89C35C\">"
 end = "</td></tr>"
 
 text = "<table border=1>"
-text = text + first + "BOOT TIME" + middle + str(boot_time) + end
-text = text + first + "CPU UTILIZATION" + middle
+text +=  first + "BOOT TIME" + middle + str(boot_time) + end
+text +=  first + "CPU UTILIZATION" + middle
 i = 1
 for cpu in cpu_util:
-	text = text + "<li>CPU {} : {}%".format(i, cpu) + "</li>"
+	text +=  "<li>CPU {} : {}%".format(i, cpu) + "</li>"
 	i+=1
 i = 1
-text = text + end
-text = text + first + "AVAILABLE MEMORY" + middle + str(mem.available) + end
-text = text + first + "USED MEMORY" + middle + str(mem.used) + end
-text = text + first + "USED PERCENTAGE" + middle + str(mem.percent) + "%" + end
-text = text + first + "CPU PERCENT" + middle + str(cpu_percent) + "%" + end
-text = text + first + "USERS" + middle + str(users[0].name) + end
-text = text + first + "PIDS (First 10)" + middle
+text +=  end
+text +=  first + "AVAILABLE MEMORY" + middle + str(mem.available) + end
+text +=  first + "USED MEMORY" + middle + str(mem.used) + end
+text +=  first + "USED PERCENTAGE" + middle + str(mem.percent) + "%" + end
+text +=  first + "CPU PERCENT" + middle + str(cpu_percent) + "%" + end
+text +=  first + "USERS" + middle + str(users[0].name) + end
+text +=  first + "PIDS (First 10)" + middle
 i = 1
 for pid in pids:
-	text = text + "<li>" + str(pid) + "</li>"
+	text +=  "<li>" + str(pid) + "</li>"
 	i += 1
 	if i > 10:
 		break
 i = 1
-text = text + end
-text = text + first + "DISKS" + middle
+text +=  end
+text +=  first + "DISKS" + middle
 i = 1
 for part in partitions:
-	text = text + "<li>" + str(part.device) + "</li>"
+	text +=  "<li>" + str(part.device) + "</li>"
 	i += 1
-text = text + end
-text = text + "</table>"
+text +=  end
+text +=  "</table>"
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.request import urlopen
