@@ -1,7 +1,7 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#November 12, 2015
-#Homework 7 - Search Engine
+#November 19, 2015
+#Homework 8 - Search Engine
 
 import os
 import fnmatch

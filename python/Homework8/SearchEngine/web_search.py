@@ -1,10 +1,12 @@
-#Brandon Marshall       
+﻿#Brandon Marshall       
 #Python Scripting
-#November 12, 2015
-#Homework 7 - Search Engine
+#November 19, 2015
+#Homework 8 - Search Engine
 
+import time
 from wsgiref.simple_server import make_server
 import sqlite3
+from searcher import perform_database_search, parse_terms
 # initialize database
 #conn = sqlite3.connect("searchengine.sqlite")
 #cursor = conn.cursor()
@@ -38,16 +40,16 @@ def search_app(environ, start_response):
 					word = form_vals[item]
 				elif item == "results":
 					res = form_vals[item]
+
+			values = parse_terms(word)
+			terms = values['terms']
+			hasAnd = values['hasAnd']
+			hasOr = values['hasOr']
 			
-			# now print the whole database to verify
-			conn = sqlite3.connect("searchengine.sqlite")
-			cursor = conn.cursor()
 			message += "<br><h3>Search Results for '" + word + "':</h3><br>"
-			results = cursor.execute("select * from results")
+			results = perform_database_search(terms, hasOr, hasAnd)
 			for result in results:
-				message += "<p>" + str(result[1]) + "</p>"
-			conn.commit()
-			conn.close()
+				message += "<p>" + str(result) + "</p>"
 
 	message += "<h1>Search!</h1>"
 	message += "<form method='POST'><br>Search Word:<input type=text name='word'>"
@@ -55,6 +57,6 @@ def search_app(environ, start_response):
 	return[bytes(message,'utf-8')]
 
 httpd = make_server('', 8000, search_app)
-print("Serving on port 8000...")
+print("Serving on http://127.0.0.1:8000/...")
 
 httpd.serve_forever()

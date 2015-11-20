@@ -1,17 +1,13 @@
 ﻿#Brandon Marshall       
 #Python Scripting
-#November 12, 2015
-#Homework 7 - Search Engine
+#November 19, 2015
+#Homework 8 - Search Engine
 
 import time
 import shelve
 import sqlite3
 
 def search(shelve_to_process, shelve_key):
-
-	# start timing of search functionality
-	start_time = time.perf_counter() * 1000
-
 	# catch any exception occurring when attempting to open the shelve
 	try:
 		s = shelve.open(shelve_to_process)
@@ -28,7 +24,7 @@ def search(shelve_to_process, shelve_key):
 
 	keepGoing = True
 	while keepGoing:
-		query = input("Options: \n. > exit\nf > forecast\ns > search\nSelection:")
+		query = input("Options: \n. > exit\nw > web search\ns > search\nf > forecast\nSelection:")
 		
 		# raise exception to prevent user to search for numbers
 		try:
@@ -42,6 +38,8 @@ def search(shelve_to_process, shelve_key):
 			keepGoing = False
 		elif query == 'f':
 			import weather_forecast
+		elif query == 'w':
+			import web_search
 		elif query == 's':
 			query = input("Search for: ")
 
@@ -53,12 +51,18 @@ def search(shelve_to_process, shelve_key):
 			word = "OR" if hasOr else "AND"
 			print("\nPerforming " + word + " search for: {\'" + '\', \''.join(terms) + "\'}")
 			print("\nNormal Search:")
-			perform_search(terms, indexedFiles, start_time, hasOr, hasAnd)
+			perform_search(terms, indexedFiles, hasOr, hasAnd)
 			print("\nDatabase Search:")
-			perform_database_search(terms, start_time, hasOr, hasAnd)
+			dbResults = perform_database_search(terms, hasOr, hasAnd)
+			# print the output
+			for result in dbResults:
+				print("Found at", result)
 			print('\n')
 
-def perform_database_search(terms, start_time, hasOr, hasAnd):
+def perform_database_search(terms, hasOr, hasAnd):
+	# start timing of search functionality
+	start_time = time.perf_counter() * 1000
+
 	conn = sqlite3.connect("searchengine.sqlite")
 	cursor = conn.cursor()
 
@@ -67,28 +71,62 @@ def perform_database_search(terms, start_time, hasOr, hasAnd):
 		for i, t in enumerate(terms):
 			if i > 0:
 				term += " OR word = '" + t + "'"
+		# select * from results where word = 'enrollment' or word = 'risen'
 		allResults = cursor.execute("select * from results where word = " + term)
 	
+	oneTerm = True
 	if hasAnd:
-		term = '%' + terms[0] + '%'
+		term = "'" + terms[0] + "'"
 		for i, t in enumerate(terms):
 			if i > 0:
-				term += " AND results like %" + t + "%"
-		allResults = cursor.execute("select * from results where results like ?", (term,))
+				term += " OR word = '" + t + "'"
+				# we have at least 2 terms
+				oneTerm = False
+				
+		# select * from results where word like '%enrollment%' or word like '%risen%'
+		allResults = cursor.execute("select * from results where word = " + term)
 
 	# finish timing of search functionality
 	end_time = time.perf_counter() * 1000
+	print("Execution time:", int(end_time - start_time))
 
-	# print the output
-	
-	for result in allResults:
-		print("Found at", result[1])	
+	theResults = set()
+	if hasOr:
+		for result in allResults:
+			theResults.add(result[1])
+
+	oneResult = True
+	if hasAnd:
+		temp = dict()
+		for result in allResults:
+			temp[result[0]] = str(result[1]).split(', ')
+		valList = list(temp.values())
+		for i, tempStrs in enumerate(valList):
+			if i == 0:
+				# initially populate the results collection from first word results
+				for ts in tempStrs:
+					theResults.add(ts)
+			else:
+				# we have more than one result
+				oneResult = False
+				for res in theResults.copy():
+					if res not in tempStrs:
+						# not a part of the next word results, so remove
+						theResults.remove(res)
+
+		# handle the use case where they searched for more than one term but only one set of results 
+		# was found because only one word existed in the database
+		if not oneTerm and oneResult:
+			theResults.clear()
 
 	conn.close()
 
-	print("Execution time:", int(end_time - start_time))
+	return theResults
 
-def perform_search(terms, indexedFiles, start_time, hasOr, hasAnd):
+def perform_search(terms, indexedFiles, hasOr, hasAnd):
+	# start timing of search functionality
+	start_time = time.perf_counter() * 1000
+
 	goodFiles = set()
 
 	if hasOr:
@@ -115,7 +153,12 @@ def perform_search(terms, indexedFiles, start_time, hasOr, hasAnd):
 	print("Execution time:", int(end_time - start_time))
 
 def parse_terms(query):
-	terms = query.split(" ")
+	if '+' in query:
+		# web sends + instead of space
+		terms = query.split("+")
+	else:
+		# search from terminal sends spaces
+		terms = query.split(" ")
 
 	hasOr = False
 	hasAnd = "and" in terms
