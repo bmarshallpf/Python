@@ -24,7 +24,7 @@ def search(shelve_to_process, shelve_key):
 
 	keepGoing = True
 	while keepGoing:
-		query = input("Options: \n. > exit\nw > web search\ns > search\nf > forecast\nSelection:")
+		query = input("Options: \n. > exit\na > REST API\nw > web search\ns > search\nf > forecast\nSelection:")
 		
 		# raise exception to prevent user to search for numbers
 		try:
@@ -40,6 +40,8 @@ def search(shelve_to_process, shelve_key):
 			import weather_forecast
 		elif query == 'w':
 			import web_search
+		elif query == 'a':
+			import web_api_get
 		elif query == 's':
 			query = input("Search for: ")
 
